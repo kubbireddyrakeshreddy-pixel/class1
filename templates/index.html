@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Find Applicable Government Schemes</title>
+<style>
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial;background:#f5f7fb;color:#111;padding:28px;}
+.wrap{max-width:1100px;margin:0 auto;}
+h1{font-size:30px;margin:0 0 16px 0;}
+.card{background:#fff;padding:20px;border-radius:10px;box-shadow:0 8px 30px rgba(20,30,60,0.06);}
+form .grid{display:grid;grid-template-columns:220px 1fr;gap:12px 18px;align-items:center;}
+label{font-weight:600;color:#222;}
+select, input[type="text"] { /* Updated this style */
+  width: 100%;
+  padding: 9px 10px;
+  border-radius: 8px;
+  border: 1px solid #dfe8f2;
+  background: white;
+  font-size: 14px;
+  box-sizing: border-box; /* Added for consistent sizing */
+}
+.actions{margin-top:14px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+button{background:#2b8a3e;color:white;border:none;padding:10px 14px;border-radius:8px;cursor:pointer;font-weight:700;}
+button:hover{opacity:0.95;}
+.results{margin-top:18px;}
+.results h2{margin:0 0 8px 0;}
+.schemelist{list-style:none;padding:0;margin:0;display:block;}
+.schemelist li{padding:12px;border-radius:8px;margin-bottom:8px;background:#f8faf9;border:1px solid #eef6ee;}
+.schemelist a{color:#0b5e14;text-decoration:none;font-weight:700;}
+.noresults{color:#9aa2a6;padding:12px;background:#fff;border-radius:8px;border:1px solid #eceff1;}
+
+/* Translate icon button - styled */
+#translate-btn {
+  position:fixed;
+  top:50%;
+  right:20px;
+  transform:translateY(-50%);
+  background:#0b5e14;
+  border:2px solid #ffffff;
+  border-radius:12px;
+  padding:6px;
+  cursor:pointer;
+  box-shadow:0 4px 12px rgba(0,0,0,0.3);
+  z-index:1000;
+}
+#translate-btn img{
+  width:50px;
+  height:50px;
+  display:block;
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>Find Applicable Government Schemes</h1>
+<div class="card">
+
+<!-- START: New Keyword Search Bar -->
+<form method="post" action="/search" style="margin-bottom: 25px; border-bottom: 2px solid #f0f4f8; padding-bottom: 20px;">
+  <div class="grid">
+    <label for="query">Keyword Search</label>
+    <input type="text" name="query" id="query" placeholder="e.g., 'farmer', 'student scholarship', or 'rural'">
+  </div>
+  <div class="actions">
+    <button type="submit">Search by Keyword</button>
+  </div>
+</form>
+<!-- END: New Keyword Search Bar -->
+
+
+<form method="post" action="/search">
+<div class="grid">
+<label for="age">Age group</label>
+<select name="age" id="age">
+<option value="">select age</option>
+{% for o in ages %}<option value="{{ o }}">{{ o }}</option>{% endfor %}
+</select>
+
+<label for="gender">Gender</label>
+<select name="gender" id="gender">
+<option value="">select gender</option>
+{% for o in genders %}<option value="{{ o }}">{{ o }}</option>{% endfor %}
+</select>
+
+<label for="occupation">Occupation / Category</label>
+<select name="occupation" id="occupation">
+<option value="">select occupation</option>
+{% for o in occupations %}<option value="{{ o }}">{{ o }}</option>{% endfor %}
+</select>
+
+<label for="income">Annual Income</label>
+<select name="income" id="income">
+<option value="">select income</option>
+{% for o in incomes %}<option value="{{ o }}">{{ o }}</option>{% endfor %}
+</select>
+
+<label for="region">Region / State</label>
+<select name="region" id="region">
+<option value="">select state</option>
+{% for o in regions %}<option value="{{ o }}">{{ o }}</option>{% endfor %}
+</select>
+
+<label for="caste">Caste</label>
+<select name="caste" id="caste">
+<option value="">select caste</option>
+{% for o in castes %}<option value="{{ o }}">{{ o }}</option>{% endfor %}
+</select>
+</div>
+
+<div class="actions">
+<button type="submit">Find Schemes by Filter</button>
+</div>
+</form>
+
+<div class="results">
+{% if results is not none %}
+<h2>Matched Schemes</h2>
+{% if results|length == 0 %}
+<div class="noresults">No schemes matched your selection. Try choosing broader filters or using the keyword search.</div>
+{% else %}
+<ul class="schemelist">
+{% for s in results %}
+<li><a href="{{ url_for('scheme_details', scheme_id=s['id']) }}" target="_blank">{{ s['name'] }}</a></li>
+{% endfor %}
+</ul>
+{% endif %}
+{% endif %}
+</div>
+</div>
+</div>
+
+<!-- Translate button -->
+<button id="translate-btn" onclick="toggleTranslate()">
+  <img src="{{ url_for('static', filename='translate.png') }}" alt="Translate">
+</button>
+<div id="google_translate_element" style="position:fixed; top:50%; right:80px; transform:translateY(-50%); display:none; z-index:1000; background:#ffffff; border:1px solid #ccc; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.25); padding:8px;"></div>
+
+<script type="text/javascript">
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement(
+    { pageLanguage: 'en', includedLanguages: 'en,hi,te,ta,ml,bn,mr,gu,pa,kn,or' },
+    'google_translate_element'
+  );
+}
+function toggleTranslate() {
+  const el = document.getElementById("google_translate_element");
+  el.style.display = el.style.display === "none" ? "block" : "none";
+}
+</script>
+<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+<!-- Chatbot Widget Code (Same as before, place it here) -->
+<!-- ========== START: Chatbot Widget ========== -->
+<!-- (Paste the full chatbot HTML/CSS/JS snippet here) -->
+<!-- ========== END: Chatbot Widget ========== -->
+<!-- Note: I'm omitting the full chatbot code for brevity, but you should
+     make sure it is still here, right before the </body> tag. -->
+
+</body>
+</html>

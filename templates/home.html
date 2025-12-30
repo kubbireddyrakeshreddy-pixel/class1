@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Home | Indian Government Schemes Finder</title>
+<style>
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial;background:#f5f7fb;color:#111;}
+nav{background:#0b5e14;padding:12px 20px;display:flex;justify-content:center;gap:20px;}
+nav a{color:white;text-decoration:none;font-weight:600;font-size:15px;}
+nav a:hover{opacity:0.85;}
+header{background:#0b5e14;color:white;padding:40px 20px;text-align:center;position:relative;}
+header h1{margin:0;font-size:32px;}
+header p{margin:10px 0 0;font-size:16px;color:#d8f3dc;}
+.container{max-width:900px;margin:40px auto;padding:20px;text-align:center;}
+.intro{font-size:17px;color:#333;margin-bottom:30px;line-height:1.6;}
+.thumbnail{display:inline-block;background:white;border-radius:12px;box-shadow:0 6px 30px rgba(20,30,60,0.12);overflow:hidden;transition:transform 0.2s;text-decoration:none;color:inherit;}
+.thumbnail:hover{transform:translateY(-5px);}
+.thumbnail img{width:100%;max-width:350px;height:200px;object-fit:cover;display:block;}
+.thumbnail .caption{padding:14px;font-weight:700;font-size:16px;color:#0b5e14;}
+.contact{margin-top:60px;padding:20px;background:#fff;border-radius:10px;box-shadow:0 4px 20px rgba(20,30,60,0.08);text-align:left;}
+.contact h2{margin-top:0;font-size:20px;color:#0b5e14;}
+.contact p{margin:6px 0;color:#444;}
+
+/* Translate icon button - styled */
+#translate-btn {
+  position:fixed;
+  top:50%;
+  right:20px;
+  transform:translateY(-50%);
+  background:#0b5e14;        /* background color */
+  border:2px solid #ffffff; /* white border */
+  border-radius:12px;
+  padding:6px;
+  cursor:pointer;
+  box-shadow:0 4px 12px rgba(0,0,0,0.3);
+  z-index:1000;
+}
+#translate-btn img{
+  width:50px;
+  height:50px;
+  display:block;
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/">Home</a>
+  <a href="/search">Search</a>
+  <a href="#contact">Contact</a>
+</nav>
+
+<header>
+  <h1>Indian Government Schemes Finder</h1>
+  <p>Find schemes tailored to your needs</p>
+</header>
+
+<div class="container">
+  <p class="intro">
+    Discover government schemes based on your age, gender, occupation, income, caste, and location.
+  </p>
+
+  <a href="/search" class="thumbnail">
+    <img src="{{ url_for('static', filename='schemesfinder.jpg') }}" alt="Find Schemes">
+    <div class="caption">Start Finding Schemes</div>
+  </a>
+
+  <div id="contact" class="contact">
+    <h2>Contact Us</h2>
+    <p><strong>Email:</strong>rakeshreddy@gmail.com</p>
+    <p><strong>Phone:</strong> +91 8125413287</p>
+    <p><strong>Address:</strong> Veltech, Avadi ,Chennai</p>
+  </div>
+</div>
+
+<!-- Translate button -->
+<button id="translate-btn" onclick="toggleTranslate()">
+  <img src="{{ url_for('static', filename='translate.png') }}" alt="Translate">
+</button>
+<div id="google_translate_element" style="position:fixed; top:50%; right:80px; transform:translateY(-50%); display:none; z-index:1000; background:#ffffff; border:1px solid #ccc; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.25); padding:8px;"></div>
+
+<script type="text/javascript">
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement(
+    { pageLanguage: 'en', includedLanguages: 'en,hi,te,ta,ml,bn,mr,gu,pa,kn,or' },
+    'google_translate_element'
+  );
+}
+function toggleTranslate() {
+  const el = document.getElementById("google_translate_element");
+  el.style.display = el.style.display === "none" ? "block" : "none";
+}
+</script>
+<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+<div class="chat-bubble" onclick="toggleChatWindow()">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/></svg>
+</div>
+
+<div class="chat-window" id="chatWindow">
+    <div class="chat-header">
+        Scheme Finder Bot
+        <span class="chat-close" onclick="toggleChatWindow()">&times;</span>
+    </div>
+    <div class="chat-body" id="chatBody">
+        <div class="chat-message bot">
+            Hello! How can I help you find a government scheme today?
+        </div>
+    </div>
+    <div class="chat-footer">
+        <input type="text" id="chatInput" placeholder="Ask about a scheme..." onkeydown="handleKeydown(event)">
+        <button onclick="sendMessage()">Send</button>
+    </div>
+</div>
+
+<style>
+    .chat-bubble {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 60px;
+        height: 60px;
+        background-color: #0b5e14; /* Match your site's theme color */
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        z-index: 9998;
+    }
+    .chat-window {
+        position: fixed;
+        bottom: 90px;
+        right: 20px;
+        width: 350px;
+        height: 450px;
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        display: none; /* Hidden by default */
+        flex-direction: column;
+        z-index: 9999;
+        overflow: hidden;
+    }
+    .chat-header {
+        background-color: #0b5e14; /* Match your site's theme color */
+        color: white;
+        padding: 15px;
+        font-weight: bold;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .chat-close {
+        cursor: pointer;
+        font-size: 20px;
+    }
+    .chat-body {
+        flex-grow: 1;
+        padding: 15px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        background-color: #f5f7fb; /* Match your site's body background */
+    }
+    .chat-message {
+        padding: 8px 12px;
+        border-radius: 18px;
+        max-width: 80%;
+        line-height: 1.4;
+    }
+    .chat-message.user {
+        background-color: #e9e9eb;
+        color: #111;
+        align-self: flex-end;
+    }
+    .chat-message.bot {
+        background-color: #0b5e14; /* Match your site's theme color */
+        color: white;
+        align-self: flex-start;
+    }
+    .chat-footer {
+        display: flex;
+        padding: 10px;
+        border-top: 1px solid #ddd;
+        background-color: #fff;
+    }
+    .chat-footer input {
+        flex-grow: 1;
+        border: 1px solid #ccc;
+        border-radius: 20px;
+        padding: 8px 12px;
+        margin-right: 10px;
+        font-size: 14px;
+    }
+    .chat-footer button {
+        background-color: #0b5e14; /* Match your site's theme color */
+        color: white;
+        border: none;
+        border-radius: 20px;
+        padding: 8px 15px;
+        cursor: pointer;
+        font-weight: 600;
+    }
+</style>
+
+<script>
+    (function() {
+        const chatWindow = document.getElementById('chatWindow');
+        const chatBody = document.getElementById('chatBody');
+        const chatInput = document.getElementById('chatInput');
+
+        // Make functions global so inline HTML (onclick) can find them
+        window.toggleChatWindow = function() {
+            chatWindow.style.display = (chatWindow.style.display === 'flex') ? 'none' : 'flex';
+        }
+
+        window.handleKeydown = function(event) {
+            if (event.key === "Enter") {
+                sendMessage();
+            }
+        }
+
+        window.sendMessage = async function() {
+            const messageText = chatInput.value.trim();
+            if (messageText === "") return;
+
+            // 1. Display user's message
+            appendMessage(messageText, 'user');
+            chatInput.value = "";
+            chatInput.disabled = true;
+
+            // Add a "typing..." indicator
+            const typingIndicator = appendMessage("Typing...", 'bot');
+
+            try {
+                // 2. Send message to the backend /chat endpoint
+                const response = await fetch('/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ message: messageText })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                const data = await response.json();
+                const botReply = data.response;
+
+                // 3. Remove "typing..." and display bot's response
+                chatBody.removeChild(typingIndicator);
+                appendMessage(botReply, 'bot');
+
+            } catch (error) {
+                console.error('Error sending message:', error);
+                // Remove "typing..." and show error
+                chatBody.removeChild(typingIndicator);
+                appendMessage("Sorry, something went wrong. Please try again.", 'bot');
+            } finally {
+                chatInput.disabled = false;
+                chatInput.focus();
+            }
+        }
+
+        function appendMessage(text, sender) {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('chat-message', sender);
+            messageElement.textContent = text;
+            chatBody.appendChild(messageElement);
+            
+            // Auto-scroll to the bottom
+            chatBody.scrollTop = chatBody.scrollHeight;
+            return messageElement; // Return element so it can be removed (for typing)
+        }
+    })();
+</script>
+
+</body>
+</html>
